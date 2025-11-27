@@ -39,11 +39,10 @@ public class LoginController {
     @Resource
     private RedisTemplate<Object,Object> redisTemplate;
     /**
-     * @Author: 张文化
-     * @Description: $登录接口
-     * @DateTime: 2025/11/25$ 09:23$
-     * @Params: $loginDto
-     * @Return $UserVo
+     * 登录
+     *
+     * @param loginDto 用户信息
+     * @return UserVo
      */
     @PostMapping("/user")
     private BaseResponse<UserVo> login(@RequestBody LoginDto loginDto) {
@@ -59,9 +58,9 @@ public class LoginController {
     }
 
     /**
-     * @Author: 张文化
-     * @Description: $获取用户信息接口
-     * @DateTime: 2025/11/25$ 09:23$
+     * 获取登录用户信息
+     *
+     * @return User
      */
     @PreAuthorize("login:userInfo")
     @GetMapping("/userInfo")
