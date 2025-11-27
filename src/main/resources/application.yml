@@ -1,0 +1,26 @@
+server:
+  port: 8080
+spring:
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+  redis:
+    host: 47.96.164.80
+    port: 6379
+    password: 123456
+    database: 10
+  datasource:
+    url: jdbc:mysql://47.96.164.80:3306/cfwl?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&tinyInt1isBit=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: cfwl
+    password: ZBzwh8510#
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+token:
+  adminSecretKey: admin
+  userSecretKey: user
+  refreshTime: 720000
+  expiresTime: 720000
