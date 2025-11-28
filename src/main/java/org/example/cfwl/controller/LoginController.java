@@ -10,6 +10,7 @@ import org.example.cfwl.model.login.dto.LoginDto;
 import org.example.cfwl.model.user.po.User;
 import org.example.cfwl.model.user.vo.UserVo;
 import org.example.cfwl.service.LoginService;
+import org.example.cfwl.util.Result;
 import org.example.cfwl.util.ResultUtil;
 import org.example.cfwl.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -68,5 +70,25 @@ public class LoginController {
         User user = loginService.getById(BaseContext.getCurrentId());
         System.out.println(BaseContext.getCurrentId());
         return ResultUtil.success(user);
+    }
+    @PreAuthorize("login:logout")
+    @PostMapping("/logout")
+    public Result logout(HttpServletRequest request) {
+        try {
+            // 获取token
+            String token = request.getHeader("UserToken");
+            // 1. 清理 Redis 中的 token
+            redisTemplate.delete(token);
+            // 2. 清理用户权限缓存
+            String cacheKey = "user_permissions:" + BaseContext.getCurrentId();
+            redisTemplate.delete(cacheKey);
+            // 3. 清理 ThreadLocal 上下文
+            BaseContext.clearCurrentName();
+            log.info("用户退出登录成功");
+            return Result.success("退出登录成功");
+        } catch (Exception e) {
+            log.error("退出登录异常", e);
+            return Result.error("退出登录失败");
+        }
     }
 }

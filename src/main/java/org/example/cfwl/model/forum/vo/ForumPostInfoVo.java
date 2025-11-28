@@ -1,17 +1,17 @@
-package org.example.cfwl.model.forum.po;
+package org.example.cfwl.model.forum.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.time.LocalDateTime;
 
-/**
- * 论坛帖子表
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("forum_post")
-public class ForumPost {
+public class ForumPostInfoVo {
 
     /** 帖子ID */
     @TableId(value = "id", type = IdType.AUTO)
@@ -29,9 +29,6 @@ public class ForumPost {
     @TableField("content")
     private String content;
 
-    /** 纯文本内容（用于搜索） */
-    @TableField("content_text")
-    private String contentText;
 
     /** 帖子摘要 */
     @TableField("summary")
@@ -61,26 +58,6 @@ public class ForumPost {
     @TableField("comment_count")
     private Integer commentCount;
 
-    /** 状态：0-删除，1-正常，2-审核中，3-审核失败 */
-    @TableField("status")
-    private Integer status;
-
-    /** 是否置顶：0-否，1-是 */
-    @TableField("is_top")
-    private Boolean isTop;
-
-    /** 是否精华：0-否，1-是 */
-    @TableField("is_essence")
-    private Boolean isEssence;
-
-    /** 是否允许评论：0-否，1-是 */
-    @TableField("is_comment")
-    private Boolean isComment;
-
-    /** 最后回复时间 */
-    @TableField("last_reply_time")
-    private LocalDateTime lastReplyTime;
-
     /** 发布时间 */
     @TableField(value = "publish_time", fill = FieldFill.INSERT)
     private LocalDateTime publishTime;
@@ -88,4 +65,7 @@ public class ForumPost {
     /** 更新时间 */
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    // 关联用户信息（非数据库字段）
+    private String username;
 }
