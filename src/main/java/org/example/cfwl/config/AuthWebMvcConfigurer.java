@@ -19,6 +19,7 @@ public class AuthWebMvcConfigurer implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(userJWT)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login/user");
+                .excludePathPatterns("/login/user")
+                .excludePathPatterns("/forum/getForumSummaryInfo");
     }
 }

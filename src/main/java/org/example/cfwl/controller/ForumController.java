@@ -9,15 +9,21 @@ import org.example.cfwl.context.BaseContext;
 import org.example.cfwl.model.forum.dto.ForumPostDto;
 import org.example.cfwl.model.forum.po.ForumPost;
 import org.example.cfwl.model.forum.vo.ForumPostInfoVo;
+import org.example.cfwl.model.forum.vo.ForumPostSummaryInfoVo;
 import org.example.cfwl.model.login.dto.LoginDto;
 import org.example.cfwl.model.user.po.User;
 import org.example.cfwl.model.user.vo.UserVo;
 import org.example.cfwl.service.ForumPostService;
+import org.example.cfwl.service.LoginService;
 import org.example.cfwl.util.ResultUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @Author: 张文化
@@ -32,6 +38,8 @@ import java.util.concurrent.TimeUnit;
 public class ForumController {
     @Resource
     private ForumPostService forumPostService;
+    @Resource
+    private LoginService loginService;
     /**
      *新增帖子
      * @param forumPostDto 帖子信息
@@ -58,5 +66,28 @@ public class ForumController {
         ForumPostInfoVo forumPostInfoVo = BeanUtil.copyProperties(forumPost, ForumPostInfoVo.class);
         forumPostInfoVo.setUsername(BaseContext.getCurrentName());
         return ResultUtil.success(forumPostInfoVo);
+    }
+
+    /**
+     * 获取帖子概要信息
+     *
+     * @return List<ForumPostSummaryInfoVo>
+     */
+    @GetMapping("/getForumSummaryInfo")
+    private BaseResponse<List<ForumPostSummaryInfoVo>> getForumSummaryInfo() {
+        List<ForumPost> forumPosts = forumPostService.getForumSummaryInfo();
+        List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos = BeanUtil.copyToList(forumPosts, ForumPostSummaryInfoVo.class);
+        List<User> users = loginService.getUsersById(forumPostSummaryInfoVos);
+        // 创建用户ID到用户的映射
+        Map<Long, User> userMap = users.stream()
+                .collect(Collectors.toMap(User::getId, Function.identity()));
+        // 赋值用户名
+        for (ForumPostSummaryInfoVo vo : forumPostSummaryInfoVos) {
+            User user = userMap.get(vo.getUserId());
+            if (user != null) {
+                vo.setUsername(user.getUsername());
+            }
+        }
+        return ResultUtil.success(forumPostSummaryInfoVos);
     }
 }

@@ -7,12 +7,15 @@ import org.example.cfwl.exception.AssertionException;
 import org.example.cfwl.mapper.AdminMapper;
 import org.example.cfwl.mapper.LoginMapper;
 import org.example.cfwl.mapper.UserMapper;
+import org.example.cfwl.model.forum.vo.ForumPostSummaryInfoVo;
 import org.example.cfwl.model.login.dto.LoginDto;
 import org.example.cfwl.model.user.po.User;
 import org.example.cfwl.service.LoginService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: 张文化
@@ -35,5 +38,10 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
                 .eq(User::getStatus,1));
         if (user == null) throw new AssertionException(ErrorCode.PARAMS_ERROR);
         return user;
+    }
+
+    @Override
+    public List<User> getUsersById(List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos) {
+        return userMapper.selectBatchIds(forumPostSummaryInfoVos.stream().map(ForumPostSummaryInfoVo::getId).collect(Collectors.toList()));
     }
 }
