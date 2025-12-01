@@ -20,6 +20,7 @@ public class AuthWebMvcConfigurer implements WebMvcConfigurer {
         registry.addInterceptor(userJWT)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login/user")
-                .excludePathPatterns("/forum/getForumSummaryInfo");
+                .excludePathPatterns("/forum/getForumSummaryInfo")
+                .excludePathPatterns("/forum/searchForumPost");
     }
 }

@@ -7,6 +7,7 @@ import org.example.cfwl.common.BaseResponse;
 import org.example.cfwl.config.PreAuthorize;
 import org.example.cfwl.context.BaseContext;
 import org.example.cfwl.model.forum.dto.ForumPostDto;
+import org.example.cfwl.model.forum.dto.ForumPostSearchDto;
 import org.example.cfwl.model.forum.po.ForumPost;
 import org.example.cfwl.model.forum.vo.ForumPostInfoVo;
 import org.example.cfwl.model.forum.vo.ForumPostSummaryInfoVo;
@@ -76,6 +77,28 @@ public class ForumController {
     @GetMapping("/getForumSummaryInfo")
     private BaseResponse<List<ForumPostSummaryInfoVo>> getForumSummaryInfo() {
         List<ForumPost> forumPosts = forumPostService.getForumSummaryInfo();
+        List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos = BeanUtil.copyToList(forumPosts, ForumPostSummaryInfoVo.class);
+        List<User> users = loginService.getUsersById(forumPostSummaryInfoVos);
+        // 创建用户ID到用户的映射
+        Map<Long, User> userMap = users.stream()
+                .collect(Collectors.toMap(User::getId, Function.identity()));
+        // 赋值用户名
+        for (ForumPostSummaryInfoVo vo : forumPostSummaryInfoVos) {
+            User user = userMap.get(vo.getUserId());
+            if (user != null) {
+                vo.setUsername(user.getUsername());
+            }
+        }
+        return ResultUtil.success(forumPostSummaryInfoVos);
+    }
+
+    /**
+     *搜索帖子
+     * @return List<ForumPostSummaryInfoVo>
+     */
+    @PostMapping("/searchForumPost")
+    private BaseResponse<List<ForumPostSummaryInfoVo>> searchForumPost(@RequestBody ForumPostSearchDto forumPostSearchDto) {
+        List<ForumPost> forumPosts = forumPostService.getForumSummaryInfoByKey(forumPostSearchDto);
         List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos = BeanUtil.copyToList(forumPosts, ForumPostSummaryInfoVo.class);
         List<User> users = loginService.getUsersById(forumPostSummaryInfoVos);
         // 创建用户ID到用户的映射

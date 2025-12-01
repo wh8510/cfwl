@@ -1,6 +1,7 @@
 package org.example.cfwl.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.example.cfwl.model.forum.dto.ForumPostSearchDto;
 import org.example.cfwl.model.forum.po.ForumPost;
 
 import java.util.List;
@@ -19,4 +20,9 @@ public interface ForumPostService extends IService<ForumPost> {
      * @return List<ForumPostSummaryInfoVo>
      */
     List<ForumPost> getForumSummaryInfo();
+    /**
+     *搜索帖子
+     * @return List<ForumPostSummaryInfoVo>
+     */
+    List<ForumPost> getForumSummaryInfoByKey(ForumPostSearchDto forumPostSearchDto);
 }

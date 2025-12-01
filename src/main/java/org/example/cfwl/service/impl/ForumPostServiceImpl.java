@@ -3,6 +3,7 @@ package org.example.cfwl.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.cfwl.mapper.ForumPostMapper;
+import org.example.cfwl.model.forum.dto.ForumPostSearchDto;
 import org.example.cfwl.model.forum.po.ForumPost;
 import org.example.cfwl.service.ForumPostService;
 import org.springframework.stereotype.Service;
@@ -24,5 +25,13 @@ public class ForumPostServiceImpl extends ServiceImpl<ForumPostMapper, ForumPost
     @Override
     public List<ForumPost> getForumSummaryInfo() {
         return forumPostMapper.selectList(new LambdaQueryWrapper<ForumPost>().eq(ForumPost::getStatus,1));
+    }
+
+    @Override
+    public List<ForumPost> getForumSummaryInfoByKey(ForumPostSearchDto forumPostSearchDto) {
+        return forumPostMapper.selectList(new LambdaQueryWrapper<ForumPost>().eq(ForumPost::getStatus,1)
+                .like(ForumPost::getTitle, forumPostSearchDto.getKeyword()).or()
+                .like(ForumPost::getContentText, forumPostSearchDto.getKeyword()).or()
+                .like(ForumPost::getSummary,forumPostSearchDto.getKeyword()));
     }
 }
