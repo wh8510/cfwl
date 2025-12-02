@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.cfwl.model.forum.dto.ForumPostSearchDto;
 import org.example.cfwl.model.forum.po.ForumPost;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -24,5 +25,5 @@ public interface ForumPostService extends IService<ForumPost> {
      *搜索帖子
      * @return List<ForumPostSummaryInfoVo>
      */
-    List<ForumPost> getForumSummaryInfoByKey(ForumPostSearchDto forumPostSearchDto);
+    List<ForumPost> getForumSummaryInfoByKey(ForumPostSearchDto forumPostSearchDto) throws IOException;
 }

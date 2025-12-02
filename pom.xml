@@ -64,6 +64,13 @@
             <version>3.10.3</version>
         </dependency>
 
+        <!-- FastJSON 2.x 版本（性能更好，修复了安全问题） -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.51</version>
+        </dependency>
+
         <!-- hutool -->
         <dependency>
             <groupId>cn.hutool</groupId>

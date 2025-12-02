@@ -20,6 +20,7 @@ import org.example.cfwl.util.ResultUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -97,7 +98,7 @@ public class ForumController {
      * @return List<ForumPostSummaryInfoVo>
      */
     @PostMapping("/searchForumPost")
-    private BaseResponse<List<ForumPostSummaryInfoVo>> searchForumPost(@RequestBody ForumPostSearchDto forumPostSearchDto) {
+    private BaseResponse<List<ForumPostSummaryInfoVo>> searchForumPost(@RequestBody ForumPostSearchDto forumPostSearchDto) throws IOException {
         List<ForumPost> forumPosts = forumPostService.getForumSummaryInfoByKey(forumPostSearchDto);
         List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos = BeanUtil.copyToList(forumPosts, ForumPostSummaryInfoVo.class);
         List<User> users = loginService.getUsersById(forumPostSummaryInfoVos);
