@@ -15,6 +15,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: cfwl
     password: ZBzwh8510#
+  elasticsearch:
+    uris: http://localhost:9200  # ES服务器地址（集群可填多个，用逗号分隔）
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   configuration:

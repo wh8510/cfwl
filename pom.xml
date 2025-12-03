@@ -88,6 +88,33 @@
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
             <version>7.17.6</version> <!-- 请确保版本与你的ES服务器版本一致 -->
         </dependency>
+
+        <!-- 新客户端依赖的 JSON 解析库（必须添加） -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.5</version> <!-- 与 Spring Boot 自带版本兼容即可 -->
+        </dependency>
+
+        <!-- 解决 jakarta.json.JsonException 类缺失问题（新 Elasticsearch 客户端必需） -->
+        <dependency>
+            <groupId>jakarta.json</groupId>
+            <artifactId>jakarta.json-api</artifactId>
+            <version>2.0.1</version> <!-- 兼容新客户端，稳定版本 -->
+        </dependency>
+
+        <!-- 支持 Java 8 日期时间类型（LocalDateTime、LocalDate 等） -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.13.5</version> <!-- 版本必须与你项目中的 jackson-databind 版本一致（你的是 2.13.5） -->
+        </dependency>
+
+        <!-- Spring Data Elasticsearch  starter（包含Elasticsearch客户端和数据访问层） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>

@@ -1,6 +1,9 @@
 package org.example.cfwl;
 
 import com.alibaba.fastjson2.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -55,12 +58,14 @@ class CfwlApplicationTests {
         int successCount = 0;
         int failCount = 0;
         List<Long> failedIds = new ArrayList<>();
-
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+        mapper.registerModule(new JavaTimeModule());
         for (ForumPost forumPost : forumPosts) {
             try {
                 IndexRequest indexRequest = new IndexRequest("forum")
                         .id(forumPost.getId().toString())
-                        .source(JSON.toJSONString(forumPost), XContentType.JSON);
+                        .source(mapper.writeValueAsString(forumPost), XContentType.JSON);
                 bulkRequest.add(indexRequest);
                 successCount++;
             } catch (Exception e) {

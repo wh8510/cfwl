@@ -1,8 +1,12 @@
 package org.example.cfwl.model.forum.po;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+
 import java.time.LocalDateTime;
 
 /**
@@ -11,10 +15,12 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("forum_post")
+@Document(indexName = "forum")
 public class ForumPost {
 
     /** 帖子ID */
     @TableId(value = "id", type = IdType.AUTO)
+    @Id
     private Long id;
 
     /** 发布用户ID */
@@ -83,9 +89,17 @@ public class ForumPost {
 
     /** 发布时间 */
     @TableField(value = "publish_time", fill = FieldFill.INSERT)
+    @JsonFormat(
+            pattern = "yyyy-MM-dd HH:mm:ss",  // 与 ES 中的日期格式完全一致（空格分隔）
+            timezone = "GMT+8"               // 时区（根据你的实际时区调整，如 Asia/Shanghai）
+    )
     private LocalDateTime publishTime;
 
     /** 更新时间 */
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(
+            pattern = "yyyy-MM-dd HH:mm:ss",  // 与 ES 中的日期格式完全一致（空格分隔）
+            timezone = "GMT+8"               // 时区（根据你的实际时区调整，如 Asia/Shanghai）
+    )
     private LocalDateTime updateTime;
 }

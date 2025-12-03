@@ -42,6 +42,6 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
 
     @Override
     public List<User> getUsersById(List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos) {
-        return userMapper.selectBatchIds(forumPostSummaryInfoVos.stream().map(ForumPostSummaryInfoVo::getId).collect(Collectors.toList()));
+        return userMapper.selectBatchIds(forumPostSummaryInfoVos.stream().map(ForumPostSummaryInfoVo::getUserId).collect(Collectors.toList()));
     }
 }
