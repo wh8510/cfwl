@@ -59,7 +59,6 @@ class CfwlApplicationTests {
         int failCount = 0;
         List<Long> failedIds = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         mapper.registerModule(new JavaTimeModule());
         for (ForumPost forumPost : forumPosts) {
             try {
