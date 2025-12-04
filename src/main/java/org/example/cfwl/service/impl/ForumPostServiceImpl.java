@@ -5,13 +5,18 @@ import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import org.example.cfwl.mapper.ForumPostMapper;
+import org.example.cfwl.model.forum.dto.ForumPostPage;
 import org.example.cfwl.model.forum.dto.ForumPostSearchDto;
 import org.example.cfwl.model.forum.po.ForumPost;
 import org.example.cfwl.repository.ForumPostRepository;
 import org.example.cfwl.service.ForumPostService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,12 +40,12 @@ public class ForumPostServiceImpl extends ServiceImpl<ForumPostMapper, ForumPost
     @Resource
     private ForumPostRepository forumPostRepository;
     @Override
-    public List<ForumPost> getForumSummaryInfo() {
-        return forumPostMapper.selectList(new LambdaQueryWrapper<ForumPost>().eq(ForumPost::getStatus,1));
+    public IPage<ForumPost> getForumSummaryInfo(ForumPostPage forumPostPage) {
+        return forumPostMapper.selectPage(new Page<ForumPost>(forumPostPage.getPageNum(), forumPostPage.getPageSize()),new LambdaQueryWrapper<ForumPost>().eq(ForumPost::getStatus,1));
     }
 
     @Override
-    public List<ForumPost> getForumSummaryInfoByKey(ForumPostSearchDto forumPostSearchDto) throws IOException {
+    public org.springframework.data.domain.Page<ForumPost> getForumSummaryInfoByKey(ForumPostSearchDto forumPostSearchDto) throws IOException {
 //        // 1. 构建搜索请求（新客户端链式构建器，替代旧的 SearchSourceBuilder）
 //        SearchRequest request = SearchRequest.of(builder -> builder
 //                .index("forum") // 指定索引
@@ -78,6 +83,7 @@ public class ForumPostServiceImpl extends ServiceImpl<ForumPostMapper, ForumPost
 //            }
 //        }
 //        return resultList;
-        return forumPostRepository.findByTitleContainingOrContentTextContainingOrSummaryContaining(forumPostSearchDto.getKeyword(), forumPostSearchDto.getKeyword(), forumPostSearchDto.getKeyword());
+        Pageable pageable = PageRequest.of(forumPostSearchDto.getPageNum()-1, forumPostSearchDto.getPageSize());
+        return forumPostRepository.findByTitleContainingOrContentTextContainingOrSummaryContaining(forumPostSearchDto.getKeyword(), forumPostSearchDto.getKeyword(), forumPostSearchDto.getKeyword(),pageable);
     }
 }

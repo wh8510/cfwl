@@ -42,7 +42,7 @@ class CfwlApplicationTests {
         log.info("开始导入论坛数据到Elasticsearch...");
 
         // 1. 获取数据
-        List<ForumPost> forumPosts = forumPostService.getForumSummaryInfo();
+        List<ForumPost> forumPosts = forumPostService.list();
         log.info("从数据库获取到 {} 条数据", forumPosts.size());
 
         if (forumPosts.isEmpty()) {

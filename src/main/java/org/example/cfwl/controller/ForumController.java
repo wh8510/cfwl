@@ -2,11 +2,14 @@ package org.example.cfwl.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.http.HtmlUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cfwl.common.BaseResponse;
 import org.example.cfwl.config.PreAuthorize;
 import org.example.cfwl.context.BaseContext;
 import org.example.cfwl.model.forum.dto.ForumPostDto;
+import org.example.cfwl.model.forum.dto.ForumPostPage;
 import org.example.cfwl.model.forum.dto.ForumPostSearchDto;
 import org.example.cfwl.model.forum.po.ForumPost;
 import org.example.cfwl.model.forum.vo.ForumPostInfoVo;
@@ -76,9 +79,9 @@ public class ForumController {
      * @return List<ForumPostSummaryInfoVo>
      */
     @GetMapping("/getForumSummaryInfo")
-    private BaseResponse<List<ForumPostSummaryInfoVo>> getForumSummaryInfo() {
-        List<ForumPost> forumPosts = forumPostService.getForumSummaryInfo();
-        List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos = BeanUtil.copyToList(forumPosts, ForumPostSummaryInfoVo.class);
+    private BaseResponse<IPage<ForumPostSummaryInfoVo>> getForumSummaryInfo(@RequestBody ForumPostPage forumPostPage) {
+        IPage<ForumPost> forumPostIPage = forumPostService.getForumSummaryInfo(forumPostPage);
+        List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos = BeanUtil.copyToList(forumPostIPage.getRecords(), ForumPostSummaryInfoVo.class);
         List<User> users = loginService.getUsersById(forumPostSummaryInfoVos);
         // 创建用户ID到用户的映射
         Map<Long, User> userMap = users.stream()
@@ -90,7 +93,12 @@ public class ForumController {
                 vo.setUsername(user.getUsername());
             }
         }
-        return ResultUtil.success(forumPostSummaryInfoVos);
+        IPage<ForumPostSummaryInfoVo> forumPostSummaryInfoVoIPage = new Page<>();
+        forumPostSummaryInfoVoIPage.setRecords(forumPostSummaryInfoVos);
+        forumPostSummaryInfoVoIPage.setTotal(forumPostIPage.getTotal());
+        forumPostSummaryInfoVoIPage.setSize(forumPostIPage.getSize());
+        forumPostSummaryInfoVoIPage.setCurrent(forumPostIPage.getCurrent());
+        return ResultUtil.success(forumPostSummaryInfoVoIPage);
     }
 
     /**
@@ -98,9 +106,9 @@ public class ForumController {
      * @return List<ForumPostSummaryInfoVo>
      */
     @PostMapping("/searchForumPost")
-    private BaseResponse<List<ForumPostSummaryInfoVo>> searchForumPost(@RequestBody ForumPostSearchDto forumPostSearchDto) throws IOException {
-        List<ForumPost> forumPosts = forumPostService.getForumSummaryInfoByKey(forumPostSearchDto);
-        List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos = BeanUtil.copyToList(forumPosts, ForumPostSummaryInfoVo.class);
+    private BaseResponse<IPage<ForumPostSummaryInfoVo>> searchForumPost(@RequestBody ForumPostSearchDto forumPostSearchDto) throws IOException {
+        org.springframework.data.domain.Page<ForumPost> forumPostIPage = forumPostService.getForumSummaryInfoByKey(forumPostSearchDto);
+        List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos = BeanUtil.copyToList(forumPostIPage.getContent(), ForumPostSummaryInfoVo.class);
         List<User> users = loginService.getUsersById(forumPostSummaryInfoVos);
         // 创建用户ID到用户的映射
         Map<Long, User> userMap = users.stream()
@@ -112,6 +120,10 @@ public class ForumController {
                 vo.setUsername(user.getUsername());
             }
         }
-        return ResultUtil.success(forumPostSummaryInfoVos);
+        IPage<ForumPostSummaryInfoVo> forumPostSummaryInfoVoIPage = new Page<>();
+        forumPostSummaryInfoVoIPage.setRecords(forumPostSummaryInfoVos);
+        forumPostSummaryInfoVoIPage.setTotal(forumPostIPage.getTotalElements());
+        forumPostSummaryInfoVoIPage.setSize(forumPostIPage.getSize());
+        return ResultUtil.success(forumPostSummaryInfoVoIPage);
     }
 }

@@ -1,8 +1,11 @@
 package org.example.cfwl.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.example.cfwl.model.forum.dto.ForumPostPage;
 import org.example.cfwl.model.forum.dto.ForumPostSearchDto;
 import org.example.cfwl.model.forum.po.ForumPost;
+import org.springframework.data.domain.Page;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,10 +23,10 @@ public interface ForumPostService extends IService<ForumPost> {
      *
      * @return List<ForumPostSummaryInfoVo>
      */
-    List<ForumPost> getForumSummaryInfo();
+    IPage<ForumPost> getForumSummaryInfo(ForumPostPage forumPostPage);
     /**
      *搜索帖子
      * @return List<ForumPostSummaryInfoVo>
      */
-    List<ForumPost> getForumSummaryInfoByKey(ForumPostSearchDto forumPostSearchDto) throws IOException;
+    Page<ForumPost> getForumSummaryInfoByKey(ForumPostSearchDto forumPostSearchDto) throws IOException;
 }
