@@ -110,6 +110,12 @@
             <version>2.13.5</version> <!-- 版本必须与你项目中的 jackson-databind 版本一致（你的是 2.13.5） -->
         </dependency>
 
+<!--        java-email-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- Spring Data Elasticsearch  starter（包含Elasticsearch客户端和数据访问层） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

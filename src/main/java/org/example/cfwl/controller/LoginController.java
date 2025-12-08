@@ -1,14 +1,15 @@
 package org.example.cfwl.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cfwl.common.BaseResponse;
 import org.example.cfwl.config.PreAuthorize;
 import org.example.cfwl.context.BaseContext;
+import org.example.cfwl.model.Register.dto.RegisterDto;
 import org.example.cfwl.model.login.dto.LoginDto;
 import org.example.cfwl.model.user.po.User;
 import org.example.cfwl.model.user.vo.UserVo;
+import org.example.cfwl.service.EmailLogService;
 import org.example.cfwl.service.LoginService;
 import org.example.cfwl.util.Result;
 import org.example.cfwl.util.ResultUtil;
@@ -40,6 +41,8 @@ public class LoginController {
     private TokenUtil tokenUtil;
     @Resource
     private RedisTemplate<Object,Object> redisTemplate;
+    @Resource
+    private EmailLogService emailLogService;
     /**
      * 登录
      *
@@ -90,5 +93,18 @@ public class LoginController {
             log.error("退出登录异常", e);
             return Result.error("退出登录失败");
         }
+    }
+
+    /**
+     * 注册
+     *
+     * @param registerDto 用户信息
+     * @return UserVo
+     */
+    @PostMapping("/register")
+    private BaseResponse<UserVo> register(@RequestBody RegisterDto registerDto) {
+        log.info("个人信息：{}", registerDto);
+
+        return null;
     }
 }

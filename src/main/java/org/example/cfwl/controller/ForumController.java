@@ -78,7 +78,7 @@ public class ForumController {
      *
      * @return List<ForumPostSummaryInfoVo>
      */
-    @GetMapping("/getForumSummaryInfo")
+    @PostMapping("/getForumSummaryInfo")
     private BaseResponse<IPage<ForumPostSummaryInfoVo>> getForumSummaryInfo(@RequestBody ForumPostPage forumPostPage) {
         IPage<ForumPost> forumPostIPage = forumPostService.getForumSummaryInfo(forumPostPage);
         List<ForumPostSummaryInfoVo> forumPostSummaryInfoVos = BeanUtil.copyToList(forumPostIPage.getRecords(), ForumPostSummaryInfoVo.class);

@@ -26,3 +26,5 @@ token:
   userSecretKey: user
   refreshTime: 720000
   expiresTime: 720000
+email:
+  loseTime: 5

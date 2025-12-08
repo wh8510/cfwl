@@ -21,6 +21,7 @@ public class AuthWebMvcConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login/user")
                 .excludePathPatterns("/forum/getForumSummaryInfo")
-                .excludePathPatterns("/forum/searchForumPost");
+                .excludePathPatterns("/forum/searchForumPost")
+                .excludePathPatterns("/emilLog/sendEmail");
     }
 }
