@@ -104,7 +104,7 @@ public class LoginController {
     @PostMapping("/register")
     private BaseResponse<UserVo> register(@RequestBody RegisterDto registerDto) {
         log.info("个人信息：{}", registerDto);
-
+        User user = loginService.registerUserInfo(registerDto);
         return null;
     }
 }
