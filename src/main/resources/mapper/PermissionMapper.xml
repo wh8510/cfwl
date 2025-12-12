@@ -23,4 +23,23 @@
         id, parent_id, name, perms, type, path, component, icon, sort_order, status, create_time, update_time
     </sql>
 
+    <select id="selectUserPermissions" resultType="java.lang.String">
+        SELECT DISTINCT p.perms
+        FROM permission p
+        INNER JOIN role_permission rp ON p.id = rp.permission_id
+        INNER JOIN user_role ur ON rp.role_id = ur.role_id
+        WHERE ur.user_id = #{userId}
+        AND p.status = 1
+        AND p.perms IS NOT NULL
+        AND p.perms != ''
+    </select>
+
+    <select id="selectUserRoles" resultType="java.lang.String">
+        SELECT DISTINCT r.role_key
+        FROM role r
+        INNER JOIN user_role ur ON r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
+        AND r.role_status = 1
+    </select>
+
 </mapper>

@@ -26,6 +26,11 @@ public class User {
      * 密码（加密后）
      */
     private String password;
+
+    /**
+     * 盐值
+     */
+    private String salt;
     
     /**
      * 邮箱

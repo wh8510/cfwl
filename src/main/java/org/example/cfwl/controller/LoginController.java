@@ -69,10 +69,11 @@ public class LoginController {
      */
     @PreAuthorize("login:userInfo")
     @GetMapping("/userInfo")
-    private BaseResponse<User> userInfo() {
+    private BaseResponse<UserVo> userInfo() {
         User user = loginService.getById(BaseContext.getCurrentId());
+        UserVo userVo = BeanUtil.copyProperties(user, UserVo.class);
         System.out.println(BaseContext.getCurrentId());
-        return ResultUtil.success(user);
+        return ResultUtil.success(userVo);
     }
     @PreAuthorize("login:logout")
     @PostMapping("/logout")
@@ -105,6 +106,7 @@ public class LoginController {
     private BaseResponse<UserVo> register(@RequestBody RegisterDto registerDto) {
         log.info("个人信息：{}", registerDto);
         User user = loginService.registerUserInfo(registerDto);
-        return null;
+        UserVo userVo = BeanUtil.copyProperties(user, UserVo.class);
+        return ResultUtil.success(userVo);
     }
 }

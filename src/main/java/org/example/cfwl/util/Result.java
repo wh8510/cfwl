@@ -1,6 +1,8 @@
 package org.example.cfwl.util;
 
 import lombok.Data;
+import org.example.cfwl.common.BaseResponse;
+import org.example.cfwl.model.user.vo.UserVo;
 
 import java.io.Serializable;
 
@@ -34,5 +36,4 @@ public class Result<T> implements Serializable {
         result.code = 0;
         return result;
     }
-
 }
